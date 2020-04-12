@@ -17,6 +17,8 @@
   "dependencies": {
     "@cypress/schema-tools": "^4.7.3",
     "@cypress/webpack-preprocessor": "^5.1.1",
+    "@hapi/joi": "^17.1.1",
+    "chai-subset": "^1.6.0",
     "cypress": "^4.3.0",
     "tb-sdk": "https://github.com/ticketbuddy/tb-sdk",
     "ts-loader": "^6.2.2",

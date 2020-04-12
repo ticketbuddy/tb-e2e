@@ -1,3 +1,5 @@
+import Joi from "@hapi/joi"
+
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -18,8 +20,12 @@ Cypress.Commands.add("signInAs", (personId) => {
   return cy.request("get", `/sign-in/${personId}`)
 })
 
-//
-//
+Cypress.Commands.add("assertValid", (joiSchema, body) => {
+  const { error } = joiSchema.validate(body)
+  console.log(error)
+  expect(error).to.eq(undefined)
+})
+
 // -- This is a child command --
 // Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
 //
