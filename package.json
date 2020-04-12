@@ -1,0 +1,20 @@
+{
+  "name": "api-e2e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:record": "cypress run --record",
+    "start": "json-server db.json",
+    "test": "run-p --race start cy:run",
+    "test:ci": "run-p --race start cy:run:record"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^4.3.0",
+    "tb-sdk": "https://github.com/ticketbuddy/tb-sdk"
+  }
+}
