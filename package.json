@@ -9,12 +9,18 @@
     "cy:run:record": "cypress run --record",
     "start": "json-server db.json",
     "test": "run-p --race start cy:run",
-    "test:ci": "run-p --race start cy:run:record"
+    "test:ci": "run-p --race start cy:run:record",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@cypress/schema-tools": "^4.7.3",
+    "@cypress/webpack-preprocessor": "^5.1.1",
     "cypress": "^4.3.0",
-    "tb-sdk": "https://github.com/ticketbuddy/tb-sdk"
+    "tb-sdk": "https://github.com/ticketbuddy/tb-sdk",
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.1"
   }
 }

@@ -1,4 +1,6 @@
 import {createPromoter, getStarted} from "tb-sdk"
+import { assertSchema } from '@cypress/schema-tools'
+import { api } from '../../dist-schemas'
 
 describe("Promoter", () => {
   it("Creates a new promoter", () => {
@@ -6,8 +8,7 @@ describe("Promoter", () => {
     cy.execute(getStarted())
 
     cy.execute(createPromoter())
-      .its('headers')
-      .its('content-type')
-      .should('include', 'application/json')
+      .its('body')
+      .then(api.assertSchema('CreatePromoter', '1.0.0'))
   })
 })
