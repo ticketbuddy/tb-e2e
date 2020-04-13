@@ -41,7 +41,7 @@ describe("Seat", () => {
 
         expect(req.body).to.deep.eq({
           product_id: createTicketReq.body.wish.product_id,
-          item_id: createTicketReq.body.wish.product_id + ".0",
+          item_id: createTicketReq.body.wish.product_id + ".1",
           customer_id: "6b54b841-c15f-4b93-add0-7b0c3f0ce59d",
           title: "Early bird ticket",
           shareholders: {"creditor-one-two-three": 400},
@@ -59,7 +59,7 @@ describe("Seat", () => {
     const reserveSeatReq = reserveSeat(createTicketReq.body.wish.product_id)
     cy.execute(reserveSeatReq)
 
-    const expectedItemId = createTicketReq.body.wish.product_id + ".0"
+    const expectedItemId = createTicketReq.body.wish.product_id + ".1"
 
     cy.execute(getReservedSeats())
       .its('body')
