@@ -1,4 +1,4 @@
-import {getStarted, signOut, createPromoter, createActivity, createActivityDate, createTicket, updateTicket, reserveSeat} from "tb-sdk"
+import {getStarted, signOut, createPromoter, createActivity, createActivityDate, createTicket, updateTicket, reserveSeat, getReservedSeats} from "tb-sdk"
 
 function ticketSetup() {
   const createPromoterReq = createPromoter()
@@ -19,7 +19,7 @@ function ticketSetup() {
   cy.execute(createTicketReq)
   cy.execute(updateTicketReq)
 
-  return {createTicketReq}
+  return {createTicketReq, createActivityDateReq}
 }
 
 describe("Seat", () => {
@@ -46,6 +46,34 @@ describe("Seat", () => {
           title: "Early bird ticket",
           shareholders: {"creditor-one-two-three": 400},
           state: "reserved"
+        })
+      })
+  })
+
+  it("fetches a user's reserved seats", () => {
+    const {createTicketReq, createActivityDateReq} = ticketSetup()
+
+    // verified user
+    cy.signInAs("6b54b841-c15f-4b93-add0-7b0c3f0ce59d")
+
+    const reserveSeatReq = reserveSeat(createTicketReq.body.wish.product_id)
+    cy.execute(reserveSeatReq)
+
+    const expectedItemId = createTicketReq.body.wish.product_id + ".0"
+
+    cy.execute(getReservedSeats())
+      .its('body')
+      .then((body) => {
+        expect(body).to.deep.include({
+          [expectedItemId]: {
+            amount: 400,
+            customer_id: "6b54b841-c15f-4b93-add0-7b0c3f0ce59d",
+            item_id: expectedItemId,
+            owning_shelf: createActivityDateReq.body.wish.activity_date_id,
+            product_id: createTicketReq.body.wish.product_id,
+            status: "reserved",
+            title: "Early bird ticket"
+          }
         })
       })
   })
