@@ -4,6 +4,7 @@ import Joi from "@hapi/joi"
 
 describe("Promoter", () => {
   beforeEach(() => {
+    cy.execute(signOut())
     cy.execute(getStarted())
   })
 
