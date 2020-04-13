@@ -107,5 +107,11 @@ describe("Activity Date", () => {
       })
   })
 
+  it("updates an activity date location")
+
+  it("updates an activity date times")
+
   it("rejects creating an activity date for an activity which is not owned by the user")
+
+  it("rejects updating an activity date which is not owned by the user")
 })
