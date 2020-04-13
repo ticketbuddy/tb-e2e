@@ -45,6 +45,19 @@ describe("Activity", () => {
           description: "A very very\n\nlong description!"
         })
       })
+
+    cy.execute(getAccountActivities())
+      .its('body')
+      .then((body) => {
+        expect(body).to.deep.eq({
+          [createActivityReq.body.wish.activity_id]: {
+            promoter_id: createPromoterReq.body.wish.promoter_id,
+            activity_id: createActivityReq.body.wish.activity_id,
+            title: "My launch event",
+            description: "A very very\n\nlong description!"
+          }
+        })
+      })
   })
 
   it("fetches all activities for the account", () => {
