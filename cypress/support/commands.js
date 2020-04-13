@@ -13,11 +13,17 @@ import Joi from "@hapi/joi"
 //
 // -- This is a parent command --
 Cypress.Commands.add("execute", (httpRequest) => {
-  return cy.request(httpRequest.method, httpRequest.path, httpRequest.body || null)
+  // return cy.request(httpRequest.method, httpRequest.path, httpRequest.body || null)
+  return cy.request({
+    method: httpRequest.method,
+    body: httpRequest.body,
+    url: httpRequest.path,
+    failOnStatusCode: false
+  })
 })
 
 Cypress.Commands.add("signInAs", (personId) => {
-  return cy.request("get", `/sign-in/${personId}`)
+  return cy.request("get", `/_private/sign-in/${personId}`)
 })
 
 Cypress.Commands.add("assertValid", (joiSchema, body) => {
