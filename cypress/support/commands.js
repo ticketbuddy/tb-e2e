@@ -26,6 +26,10 @@ Cypress.Commands.add("signInAs", (personId) => {
   return cy.request("get", `/_private/sign-in/${personId}`)
 })
 
+Cypress.Commands.add("upgradeToVerified", () => {
+  return cy.request("get", "/_private/upgrade-person-to-verified")
+})
+
 Cypress.Commands.add("assertValid", (joiSchema, body) => {
   const { error } = joiSchema.validate(body)
   console.log(error)

@@ -3237,7 +3237,7 @@ tapable@^1.0.0, tapable@^1.1.3:
 
 "tb-sdk@https://github.com/ticketbuddy/tb-sdk":
   version "0.0.2"
-  resolved "https://github.com/ticketbuddy/tb-sdk#60403a9cf15b3f17fb9fa00d91a6e4034c85d7ea"
+  resolved "https://github.com/ticketbuddy/tb-sdk#2b27393c5f753ebfc4981398211068b6f66a86ea"
   dependencies:
     uuid "^7.0.3"
 
