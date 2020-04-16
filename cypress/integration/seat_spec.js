@@ -72,7 +72,8 @@ describe("Seat", () => {
             owning_shelf: createActivityDateReq.body.wish.activity_date_id,
             product_id: createTicketReq.body.wish.product_id,
             status: "reserved",
-            title: "Early bird ticket"
+            title: "Early bird ticket",
+            shareholders: {"creditor-one-two-three": 400}
           }
         })
       })
