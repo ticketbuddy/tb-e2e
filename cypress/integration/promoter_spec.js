@@ -47,4 +47,6 @@ describe("Promoter", () => {
       expect(Object.keys(body)).to.have.length(1)
     })
   })
+
+  it("updates a promoter")
 });

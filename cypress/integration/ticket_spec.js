@@ -63,5 +63,44 @@ describe("Ticket", () => {
       })
   })
 
-  it("rejects updating a ticket when user is not allowed")
+  it("rejects creating a ticket when user is not allowed", () => {
+    const createPromoterReq = createPromoter()
+    const createActivityReq = createActivity(createPromoterReq.body.wish.promoter_id)
+    const createActivityDateReq = createActivityDate(createActivityReq.body.wish.activity_id)
+    const createTicketReq = createTicket("some-other-activity-date")
+
+    cy.execute(createPromoterReq)
+    cy.execute(createActivityReq)
+    cy.execute(createActivityDateReq)
+
+    cy.execute(createTicketReq)
+      .then((req) => {
+        expect(req.status).to.eq(403)
+      })
+  })
+
+  it("rejects updating a ticket when user does not have permission", () => {
+    const createPromoterReq = createPromoter()
+    const createActivityReq = createActivity(createPromoterReq.body.wish.promoter_id)
+    const createActivityDateReq = createActivityDate(createActivityReq.body.wish.activity_id)
+    const createTicketReq = createTicket(createActivityDateReq.body.wish.activity_date_id)
+
+    cy.execute(createPromoterReq)
+    cy.execute(createActivityReq)
+    cy.execute(createActivityDateReq)
+    cy.execute(createTicketReq)
+
+    const updateTicketReq = updateTicket({
+      ticketId: "this-is-not-my-ticket",
+      title: "Early bird ticket",
+      quantity: 200,
+      creditorId: "creditor-one-two-three",
+      amount: 400
+    })
+
+    cy.execute(updateTicketReq)
+      .then((req) => {
+        expect(req.status).to.eq(403)
+      })
+  })
 })

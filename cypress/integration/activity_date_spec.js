@@ -111,7 +111,18 @@ describe("Activity Date", () => {
 
   it("updates an activity date times")
 
-  it("rejects creating an activity date for an activity which is not owned by the user")
+  it("rejects creating an activity date for an activity which is not owned by the user", () => {
+    const createPromoterReq = createPromoter()
+    const createActivityReq = createActivity(createPromoterReq.body.wish.promoter_id)
+    const createActivityDateReq = createActivityDate("an-invalid-activity-id")
+    cy.execute(createPromoterReq)
+    cy.execute(createActivityReq)
+
+    cy.execute(createActivityDateReq)
+      .then((req) => {
+        expect(req.status).to.eq(403)
+      })
+  })
 
   it("rejects updating an activity date which is not owned by the user")
 })

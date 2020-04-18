@@ -34,8 +34,6 @@ describe("Activity", () => {
     cy.execute(createPromoterReq)
     cy.execute(createActivityReq)
     cy.execute(updateActivityReq)
-
-    cy.execute(createActivityReq)
       .its('body')
       .then((body) => {
         expect(body).to.deep.eq({
@@ -86,9 +84,33 @@ describe("Activity", () => {
       .then((body) => cy.assertValid(schema, body))
   })
 
-  it("rejects activity creation when user does not own promoter")
+  it("rejects activity creation when user does not own promoter", () => {
+    const createPromoterReq = createPromoter()
+    const createActivityReq = createActivity("some-other-promoter-id")
+    cy.execute(createPromoterReq)
+
+    cy.execute(createActivityReq)
+      .then((req) => {
+        expect(req.status).to.eq(403)
+      })
+  })
 
   it("rejects fetching activities for a promoter the account does not own")
 
-  it("rejects updating an activity which is not owned")
+  it("rejects updating an activity which is not owned", () => {
+    const createPromoterReq = createPromoter()
+    const createActivityReq = createActivity(createPromoterReq.body.wish.promoter_id)
+
+    const updateActivityReq = updateActivity({activityId: "some-other-activity",
+      title: "My launch event",
+      description: "A very very\n\nlong description!"
+    })
+
+    cy.execute(createPromoterReq)
+    cy.execute(createActivityReq)
+    cy.execute(updateActivityReq)
+      .then((req) => {
+        expect(req.status).to.eq(403)
+      })
+  })
 })
