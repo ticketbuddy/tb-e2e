@@ -1,4 +1,4 @@
-import {createPromoter, getStarted, getAccountPromoters, signOut} from "tb-sdk"
+import {createPromoter, getStarted, getAccountPromoters, signOut, updatePromoter} from "tb-sdk"
 import {createPromoterSchema, accountPromotersSchema} from "../schemas"
 import Joi from "@hapi/joi"
 
@@ -48,5 +48,37 @@ describe("Promoter", () => {
     })
   })
 
-  it("updates a promoter")
+  it("updates a promoter", () => {
+    const createPromoterReq = createPromoter();
+    const updatePromoterReq = updatePromoter({
+      promoter_id: createPromoterReq.body.wish.promoter_id,
+      title: "A new promoter",
+      description: "A description",
+    });
+    cy.execute(createPromoterReq)
+    cy.execute(updatePromoterReq)
+      .then((req) => {
+        expect(req.status).to.eq(200)
+        expect(req.body).to.include({
+          promoter_id: createPromoterReq.body.wish.promoter_id,
+          description: "A description",
+          title: "A new promoter"
+        })
+      })
+  })
+
+  it("rejects updating a promoter if permission denied", () => {
+    const createPromoterReq = createPromoter();
+    const updatePromoterReq = updatePromoter({
+      promoter_id: "some-other-promoter",
+      title: "A new promoter",
+      description: "A description",
+    });
+    cy.execute(createPromoterReq)
+    cy.execute(updatePromoterReq)
+      .then((req) => {
+        expect(req.status).to.eq(403)
+        expect(req.body).to.include({})
+      })
+  })
 });
