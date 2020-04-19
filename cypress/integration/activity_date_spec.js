@@ -107,6 +107,20 @@ describe("Activity Date", () => {
       })
   })
 
+  it("rejects querying activity dates for activity the user does not own", () => {
+    const createPromoterReq = createPromoter()
+    const createActivityReq = createActivity(createPromoterReq.body.wish.promoter_id)
+    const createActivityDateReq = createActivityDate(createActivityReq.body.wish.activity_id)
+    cy.execute(createPromoterReq)
+    cy.execute(createActivityReq)
+    cy.execute(createActivityDateReq)
+
+    cy.execute(getAccountActivityDatesByActivity("i-dont-own-this-activity"))
+      .then((req) => {
+        expect(req.status).to.eq(403)
+      })
+  })
+
   it("updates an activity date location")
 
   it("updates an activity date times")

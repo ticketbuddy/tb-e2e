@@ -95,7 +95,19 @@ describe("Activity", () => {
       })
   })
 
-  it("rejects fetching activities for a promoter the account does not own")
+  it("rejects fetching activities for a promoter the account does not own", () => {
+    const createPromoterReq = createPromoter()
+    const createActivityReq = createActivity(createPromoterReq.body.wish.promoter_id)
+    cy.execute(createPromoterReq)
+    cy.execute(createActivityReq)
+
+    const schema = getAccountActivitiesSchema(createPromoterReq.body.wish.promoter_id, createActivityReq.body.wish.activity_id);
+
+    cy.execute(getAccountActivitiesByPromoter("not-my-promoter"))
+      .then((req) => {
+        expect(req.status).to.eq(403)
+      })
+  })
 
   it("rejects updating an activity which is not owned", () => {
     const createPromoterReq = createPromoter()
