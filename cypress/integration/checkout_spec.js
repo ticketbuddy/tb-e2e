@@ -146,6 +146,30 @@ describe("complete checkout (using debug endpoint to test response to stripe)", 
       })
   })
 
+  it("when a checkout has already been completed", () => {
+    cy.execute(getStarted())
+    const {createTicketReq} = ticketSetup()
+    const expectedSeatId = productIdToItemId(createTicketReq.body.wish.product_id, 1)
+    const checkoutAmount = 400
+    const reserveSeatReq = reserveSeat(createTicketReq.body.wish.product_id)
+    const startCheckoutReq = startCheckout([expectedSeatId], checkoutAmount)
+    cy.execute(signOut())
+    cy.execute(getStarted())
+    cy.upgradeToVerified()
+    cy.execute(reserveSeatReq)
+    cy.execute(startCheckoutReq)
+
+    // complete checkout first time
+    cy.completeCheckout(startCheckoutReq.body.content.checkout_id)
+
+    // respond with 200 when the checkout is already completed
+    cy.completeCheckout(startCheckoutReq.body.content.checkout_id)
+      .then((req) => {
+        expect(req.status).to.eq(200)
+        expect(req.body).to.deep.eq({})
+      })
+  })
+
   it("rejects completing a checkout that has an invalid checkout id", () => {
     cy.execute(getStarted())
     const {createTicketReq} = ticketSetup()
