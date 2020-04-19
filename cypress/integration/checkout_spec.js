@@ -1,11 +1,11 @@
 import {startCheckout, getStarted, signOut, createActivityDate, reserveSeat, getReservedSeats, getCompletedSeats} from "tb-sdk"
 import {productIdToItemId, ticketSetup} from "../support/helpers"
 
-describe("Checkout", () => {
-  beforeEach(() => {
-    cy.execute(signOut())
-  })
+beforeEach(() => {
+  cy.execute(signOut())
+})
 
+describe("Checkout", () => {
   it("allows you to start a checkout", () => {
     cy.execute(getStarted())
     const {createTicketReq} = ticketSetup()
@@ -30,26 +30,6 @@ describe("Checkout", () => {
           items: [expectedSeatId],
           "completed?": false
         })
-      })
-  })
-
-  it("completes a checkout (uses debug endpoint)", () => {
-    cy.execute(getStarted())
-    const {createTicketReq} = ticketSetup()
-    const expectedSeatId = productIdToItemId(createTicketReq.body.wish.product_id, 1)
-    const checkoutAmount = 400
-    const reserveSeatReq = reserveSeat(createTicketReq.body.wish.product_id)
-    const startCheckoutReq = startCheckout([expectedSeatId], checkoutAmount)
-    cy.execute(signOut())
-    cy.execute(getStarted())
-    cy.upgradeToVerified()
-    cy.execute(reserveSeatReq)
-    cy.execute(startCheckoutReq)
-
-    cy.completeCheckout(startCheckoutReq.body.content.checkout_id)
-      .then((req) => {
-        expect(req.status).to.eq(200)
-        expect(req.body).to.deep.eq({})
       })
   })
 
@@ -141,6 +121,68 @@ describe("Checkout", () => {
           status: "reserved",
           title: "Early bird ticket"
         })
+      })
+  })
+})
+
+describe("complete checkout (using debug endpoint to test response to stripe)", () => {
+  it("completes a checkout", () => {
+    cy.execute(getStarted())
+    const {createTicketReq} = ticketSetup()
+    const expectedSeatId = productIdToItemId(createTicketReq.body.wish.product_id, 1)
+    const checkoutAmount = 400
+    const reserveSeatReq = reserveSeat(createTicketReq.body.wish.product_id)
+    const startCheckoutReq = startCheckout([expectedSeatId], checkoutAmount)
+    cy.execute(signOut())
+    cy.execute(getStarted())
+    cy.upgradeToVerified()
+    cy.execute(reserveSeatReq)
+    cy.execute(startCheckoutReq)
+
+    cy.completeCheckout(startCheckoutReq.body.content.checkout_id)
+      .then((req) => {
+        expect(req.status).to.eq(200)
+        expect(req.body).to.deep.eq({})
+      })
+  })
+
+  it("rejects completing a checkout that has an invalid checkout id", () => {
+    cy.execute(getStarted())
+    const {createTicketReq} = ticketSetup()
+    const expectedSeatId = productIdToItemId(createTicketReq.body.wish.product_id, 1)
+    const checkoutAmount = 400
+    const reserveSeatReq = reserveSeat(createTicketReq.body.wish.product_id)
+    const startCheckoutReq = startCheckout([expectedSeatId], checkoutAmount)
+    cy.execute(signOut())
+    cy.execute(getStarted())
+    cy.upgradeToVerified()
+    cy.execute(reserveSeatReq)
+    cy.execute(startCheckoutReq)
+
+    cy.completeCheckout("invalid-checkout-id")
+      .then((req) => {
+        expect(req.status).to.eq(400)
+        expect(req.body).to.deep.eq({})
+      })
+  })
+
+  it("rejects completing a checkout that doesnt exist (uses debug endpoint)", () => {
+    cy.execute(getStarted())
+    const {createTicketReq} = ticketSetup()
+    const expectedSeatId = productIdToItemId(createTicketReq.body.wish.product_id, 1)
+    const checkoutAmount = 400
+    const reserveSeatReq = reserveSeat(createTicketReq.body.wish.product_id)
+    const startCheckoutReq = startCheckout([expectedSeatId], checkoutAmount)
+    cy.execute(signOut())
+    cy.execute(getStarted())
+    cy.upgradeToVerified()
+    cy.execute(reserveSeatReq)
+    cy.execute(startCheckoutReq)
+
+    cy.completeCheckout("checkout_woah-i-dont-exist-woah-i-dont-exist-woah-i-dont-exist")
+      .then((req) => {
+        expect(req.status).to.eq(400)
+        expect(req.body).to.deep.eq({})
       })
   })
 })

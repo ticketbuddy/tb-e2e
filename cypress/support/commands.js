@@ -26,11 +26,19 @@ Cypress.Commands.add("execute", (httpRequest) => {
 })
 
 Cypress.Commands.add("signInAs", (personId) => {
-  return cy.request("get", `/_private/sign-in/${personId}`)
+  return cy.request({
+    method: "get",
+    url: `/_private/sign-in/${personId}`,
+    failOnStatusCode: false
+  })
 })
 
 Cypress.Commands.add("completeCheckout", (checkoutId) => {
-  return cy.request("get", `/_private/complete-checkout/${checkoutId}`)
+  return cy.request({
+    method: "get",
+    url: `/_private/complete-checkout/${checkoutId}`,
+    failOnStatusCode: false
+  })
 })
 
 Cypress.Commands.add("upgradeToVerified", () => {
