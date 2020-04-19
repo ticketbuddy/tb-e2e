@@ -29,6 +29,10 @@ Cypress.Commands.add("signInAs", (personId) => {
   return cy.request("get", `/_private/sign-in/${personId}`)
 })
 
+Cypress.Commands.add("completeCheckout", (checkoutId) => {
+  return cy.request("get", `/_private/complete-checkout/${checkoutId}`)
+})
+
 Cypress.Commands.add("upgradeToVerified", () => {
   return cy.request("get", "/_private/upgrade-person-to-verified")
 })
