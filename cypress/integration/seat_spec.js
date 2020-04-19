@@ -1,4 +1,5 @@
 import {getStarted, signOut, createPromoter, createActivity, createActivityDate, createTicket, updateTicket, reserveSeat, getReservedSeats} from "tb-sdk"
+import {productIdToItemId} from "../support/helpers"
 
 function ticketSetup(quantity = 1) {
   const createPromoterReq = createPromoter()
@@ -32,7 +33,7 @@ describe("Seat", () => {
     const {createTicketReq} = ticketSetup()
 
     // verified user
-    cy.signInAs("6b54b841-c15f-4b93-add0-7b0c3f0ce59d")
+    cy.signInAs("6b54b841c15f4b93add07b0c3f0ce59d")
 
     const reserveSeatReq = reserveSeat(createTicketReq.body.wish.product_id)
     cy.execute(reserveSeatReq)
@@ -41,8 +42,8 @@ describe("Seat", () => {
 
         expect(req.body).to.deep.eq({
           product_id: createTicketReq.body.wish.product_id,
-          item_id: createTicketReq.body.wish.product_id + ".1",
-          customer_id: "6b54b841-c15f-4b93-add0-7b0c3f0ce59d",
+          item_id: productIdToItemId(createTicketReq.body.wish.product_id, 1),
+          customer_id: "6b54b841c15f4b93add07b0c3f0ce59d",
           title: "Early bird ticket",
           shareholders: {"creditor-one-two-three": 400},
           state: "reserved"
@@ -54,12 +55,12 @@ describe("Seat", () => {
     const {createTicketReq, createActivityDateReq} = ticketSetup()
 
     // verified user
-    cy.signInAs("6b54b841-c15f-4b93-add0-7b0c3f0ce59d")
+    cy.signInAs("6b54b841c15f4b93add07b0c3f0ce59d")
 
     const reserveSeatReq = reserveSeat(createTicketReq.body.wish.product_id)
     cy.execute(reserveSeatReq)
 
-    const expectedItemId = createTicketReq.body.wish.product_id + ".1"
+    const expectedItemId = productIdToItemId(createTicketReq.body.wish.product_id, 1)
 
     cy.execute(getReservedSeats())
       .its('body')
@@ -67,7 +68,7 @@ describe("Seat", () => {
         expect(body).to.deep.include({
           [expectedItemId]: {
             amount: 400,
-            customer_id: "6b54b841-c15f-4b93-add0-7b0c3f0ce59d",
+            customer_id: "6b54b841c15f4b93add07b0c3f0ce59d",
             item_id: expectedItemId,
             owning_shelf: createActivityDateReq.body.wish.activity_date_id,
             product_id: createTicketReq.body.wish.product_id,
@@ -83,7 +84,7 @@ describe("Seat", () => {
     const {createTicketReq} = ticketSetup(0)
 
     // verified user
-    cy.signInAs("6b54b841-c15f-4b93-add0-7b0c3f0ce59d")
+    cy.signInAs("6b54b841c15f4b93add07b0c3f0ce59d")
 
     const reserveSeatReq = reserveSeat(createTicketReq.body.wish.product_id)
     cy.execute(reserveSeatReq)
@@ -100,7 +101,7 @@ describe("Seat", () => {
     const {createTicketReq} = ticketSetup()
 
     // verified user
-    cy.signInAs("6b54b841-c15f-4b93-add0-7b0c3f0ce59d")
+    cy.signInAs("6b54b841c15f4b93add07b0c3f0ce59d")
 
     const reserveSeatReq = reserveSeat("this-ticket-does-not-exist")
     cy.execute(reserveSeatReq)

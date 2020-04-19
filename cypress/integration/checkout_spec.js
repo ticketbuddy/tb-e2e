@@ -1,4 +1,5 @@
 import {startCheckout, getStarted, signOut, createPromoter, createActivity, createActivityDate, createTicket, updateTicket, reserveSeat, getReservedSeats} from "tb-sdk"
+import {productIdToItemId} from "../support/helpers"
 
 function ticketSetup() {
   const createPromoterReq = createPromoter()
@@ -30,7 +31,7 @@ describe("Checkout", () => {
   it("allows you to start a checkout", () => {
     cy.execute(getStarted())
     const {createTicketReq} = ticketSetup()
-    const expectedSeatId = createTicketReq.body.wish.product_id + ".1"
+    const expectedSeatId = productIdToItemId(createTicketReq.body.wish.product_id, 1)
     const checkoutAmount = 400
 
     cy.execute(signOut())
@@ -58,7 +59,7 @@ describe("Checkout", () => {
     cy.execute(getStarted())
     const {createTicketReq, createActivityDateReq} = ticketSetup()
     const wrongSeatId = "this-is-so-wrong.1"
-    const correctSeatId = createTicketReq.body.wish.product_id + ".1"
+    const correctSeatId = productIdToItemId(createTicketReq.body.wish.product_id, 1)
     const checkoutAmount = 400
 
     cy.execute(signOut())
@@ -88,7 +89,7 @@ describe("Checkout", () => {
   it("prevents you starting a checkout when the total amount does not match that calculated on the server", () => {
     cy.execute(getStarted())
     const {createTicketReq, createActivityDateReq} = ticketSetup()
-    const seatId = createTicketReq.body.wish.product_id + ".1"
+    const seatId = productIdToItemId(createTicketReq.body.wish.product_id, 1)
     const wrongCheckoutAmount = 399
     const correctCheckoutAmount = 400
 
