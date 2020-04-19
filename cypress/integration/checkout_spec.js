@@ -33,7 +33,7 @@ describe("Checkout", () => {
       })
   })
 
-  it("completes a checkout", () => {
+  it("completes a checkout (bypassess stripe auth & complex body parsing)", () => {
     cy.execute(getStarted())
     const {createTicketReq} = ticketSetup()
     const expectedSeatId = productIdToItemId(createTicketReq.body.wish.product_id, 1)
