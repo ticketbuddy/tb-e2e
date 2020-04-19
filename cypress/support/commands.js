@@ -13,7 +13,10 @@ import Joi from "@hapi/joi"
 //
 // -- This is a parent command --
 Cypress.Commands.add("execute", (httpRequest) => {
-  // return cy.request(httpRequest.method, httpRequest.path, httpRequest.body || null)
+
+  // slight pause for asynchronous actions on server.
+  cy.wait(20)
+
   return cy.request({
     method: httpRequest.method,
     body: httpRequest.body,

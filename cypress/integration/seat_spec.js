@@ -1,6 +1,6 @@
 import {getStarted, signOut, createPromoter, createActivity, createActivityDate, createTicket, updateTicket, reserveSeat, getReservedSeats} from "tb-sdk"
 
-function ticketSetup() {
+function ticketSetup(quantity = 1) {
   const createPromoterReq = createPromoter()
   const createActivityReq = createActivity(createPromoterReq.body.wish.promoter_id)
   const createActivityDateReq = createActivityDate(createActivityReq.body.wish.activity_id)
@@ -8,7 +8,7 @@ function ticketSetup() {
   const updateTicketReq = updateTicket({
     ticketId: createTicketReq.body.wish.product_id,
     title: "Early bird ticket",
-    quantity: 1,
+    quantity: quantity,
     creditorId: "creditor-one-two-three",
     amount: 400
   })
@@ -79,9 +79,39 @@ describe("Seat", () => {
       })
   })
 
-  it("rejects when no seats are available")
+  it("rejects when no seats are available", () => {
+    const {createTicketReq} = ticketSetup(0)
 
-  it("rejects when the ticket does not exist")
+    // verified user
+    cy.signInAs("6b54b841-c15f-4b93-add0-7b0c3f0ce59d")
+
+    const reserveSeatReq = reserveSeat(createTicketReq.body.wish.product_id)
+    cy.execute(reserveSeatReq)
+      .then((req) => {
+        expect(req.status).to.eq(400)
+
+        expect(req.body).to.deep.eq({
+          status: "Sold out"
+        })
+      })
+  })
+
+  it("rejects when the ticket does not exist", () => {
+    const {createTicketReq} = ticketSetup()
+
+    // verified user
+    cy.signInAs("6b54b841-c15f-4b93-add0-7b0c3f0ce59d")
+
+    const reserveSeatReq = reserveSeat("this-ticket-does-not-exist")
+    cy.execute(reserveSeatReq)
+      .then((req) => {
+        expect(req.status).to.eq(400)
+
+        expect(req.body).to.deep.eq({
+          status: "No product exists."
+        })
+      })
+  })
 
   it("rejects anonymous users", () => {
     cy.execute(signOut())
