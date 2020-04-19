@@ -33,6 +33,15 @@ Cypress.Commands.add("signInAs", (personId) => {
   })
 })
 
+Cypress.Commands.add("reversePayouts", (reversePayouts) => {
+  return cy.request({
+    method: "post",
+    body: reversePayouts,
+    url: `/_private/reverse-payouts`,
+    failOnStatusCode: false
+  })
+})
+
 Cypress.Commands.add("completeCheckout", (checkoutId) => {
   return cy.request({
     method: "get",
