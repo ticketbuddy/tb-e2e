@@ -1,4 +1,4 @@
-import {startCheckout, getStarted, signOut, createActivityDate, reserveSeat, getReservedSeats} from "tb-sdk"
+import {startCheckout, getStarted, signOut, createActivityDate, reserveSeat, getReservedSeats, getCompletedSeats} from "tb-sdk"
 import {productIdToItemId, ticketSetup} from "../support/helpers"
 
 describe("Checkout", () => {
@@ -31,6 +31,55 @@ describe("Checkout", () => {
           "completed?": false
         })
       })
+  })
+
+  it("completes a checkout", () => {
+    cy.execute(getStarted())
+    const {createTicketReq} = ticketSetup()
+    const expectedSeatId = productIdToItemId(createTicketReq.body.wish.product_id, 1)
+    const checkoutAmount = 400
+    const reserveSeatReq = reserveSeat(createTicketReq.body.wish.product_id)
+    const startCheckoutReq = startCheckout([expectedSeatId], checkoutAmount)
+    cy.execute(signOut())
+    cy.execute(getStarted())
+    cy.upgradeToVerified()
+    cy.execute(reserveSeatReq)
+    cy.execute(startCheckoutReq)
+
+    cy.completeCheckout(startCheckoutReq.body.content.checkout_id)
+      .then((req) => {
+        expect(req.status).to.eq(200)
+        expect(req.body).to.deep.eq({})
+      })
+  })
+
+  it("fetches completed seats for a person", () => {
+    cy.execute(getStarted())
+    const {createTicketReq, createActivityDateReq} = ticketSetup()
+    const expectedSeatId = productIdToItemId(createTicketReq.body.wish.product_id, 1)
+    const checkoutAmount = 400
+    const reserveSeatReq = reserveSeat(createTicketReq.body.wish.product_id)
+    const startCheckoutReq = startCheckout([expectedSeatId], checkoutAmount)
+    cy.execute(signOut())
+    cy.execute(getStarted())
+    cy.upgradeToVerified()
+    cy.execute(reserveSeatReq)
+    cy.execute(startCheckoutReq)
+    cy.completeCheckout(startCheckoutReq.body.content.checkout_id)
+
+    cy.execute(getCompletedSeats())
+    .then((req) => {
+      expect(req.status).to.deep.eq(200)
+      expect(req.body[expectedSeatId]).to.deep.include({
+          amount: 400,
+          item_id: expectedSeatId,
+          owning_shelf: createActivityDateReq.body.wish.activity_date_id,
+          product_id: createTicketReq.body.wish.product_id,
+          shareholders: {"creditor-one-two-three": 400},
+          status: "completed",
+          title: "Early bird ticket"
+      })
+    })
   })
 
   it("prevents you starting a checkout when items do not match those on the server", () => {
