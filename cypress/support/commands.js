@@ -21,7 +21,8 @@ Cypress.Commands.add("execute", (httpRequest) => {
     method: httpRequest.method,
     body: httpRequest.body,
     url: httpRequest.path,
-    failOnStatusCode: false
+    failOnStatusCode: false,
+    followRedirect: false
   })
 })
 
