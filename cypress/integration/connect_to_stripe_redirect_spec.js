@@ -21,7 +21,7 @@ describe("Connect to stripe account redirect", () => {
     cy.execute(connectToStripeRedirect())
       .then((req) => {
         expect(req.status).to.eq(403)
-        expect(req.headers).to.not.have.key('location')
+        expect(req.headers).to.not.include.key('location')
       })
   })
 
@@ -31,7 +31,7 @@ describe("Connect to stripe account redirect", () => {
     cy.execute(connectToStripeRedirect())
       .then((req) => {
         expect(req.status).to.eq(403)
-        expect(req.headers).to.not.have.key('location')
+        expect(req.headers).to.not.include.key('location')
       })
   })
 
