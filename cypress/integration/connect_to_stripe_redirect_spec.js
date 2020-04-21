@@ -34,4 +34,15 @@ describe("Connect to stripe account redirect", () => {
         expect(req.headers).to.not.have.key('location')
       })
   })
+
+  it("does not redirect is already connected to a stripe account", () => {
+    cy.upgradeToVerified()
+    cy.linkCurrentCreditorToStripeAccount("a-stripe-ac")
+
+    cy.execute(connectToStripeRedirect())
+      .then((req) => {
+        expect(req.status).to.eq(302)
+        expect(req.headers.location).to.eq("/dashboard?status=creditor_already_linked_to_stripe")
+      })
+  })
 })

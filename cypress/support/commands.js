@@ -51,6 +51,14 @@ Cypress.Commands.add("completeCheckout", (checkoutId) => {
   })
 })
 
+Cypress.Commands.add("linkCurrentCreditorToStripeAccount", (stripeAccountId) => {
+  return cy.request({
+    method: "get",
+    url: `/_private/link-creditor-to-stripe/${stripeAccountId}`,
+    failOnStatusCode: true
+  })
+})
+
 Cypress.Commands.add("upgradeToVerified", () => {
   return cy.request("get", "/_private/upgrade-person-to-verified")
 })
