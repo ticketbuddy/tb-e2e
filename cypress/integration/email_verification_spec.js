@@ -46,5 +46,7 @@ describe("Email verification", () => {
         expect(req.status).to.eq(200)
         expect(req.body).to.deep.eq({})
       })
+
+    // TODO check _private/sent_emails to see the email that was sent
   })
 })
