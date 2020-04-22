@@ -24,23 +24,20 @@ describe("Sign up", () => {
       .then((req) => {
         expect(req.status).to.eq(400)
         expect(req.body).to.deep.eq({
-          error_field: "password",
-          reason: "too_short"
+          password: ["should be at least 8 character(s)"]
         })
         expect(req.headers).not.to.include.key("set-cookie")
         expect(req.headers).not.to.include.key("location")
       })
   })
 
-  it("email too short", () => {
-    const email = makeId(1) + "@k"
-
+  it("email has invalid format", () => {
+    let email = makeId(3)
     cy.execute(signUp(email, "alongpassword"))
       .then((req) => {
         expect(req.status).to.eq(400)
         expect(req.body).to.deep.eq({
-          error_field: "email",
-          reason: "too_short"
+          email: ["has invalid format"]
         })
         expect(req.headers).not.to.include.key("set-cookie")
         expect(req.headers).not.to.include.key("location")
