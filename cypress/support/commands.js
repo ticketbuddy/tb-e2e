@@ -60,6 +60,17 @@ Cypress.Commands.add("completeCheckout", (checkoutId) => {
   })
 })
 
+Cypress.Commands.add("addPendingFunds", (amount) => {
+  return cy.request({
+    method: "post",
+    url: `/_private/creditor-add-pending-funds`,
+    body: {
+      amount: amount
+    },
+    failOnStatusCode: false
+  })
+})
+
 Cypress.Commands.add("linkCurrentCreditorToStripeAccount", (stripeAccountId) => {
   return cy.request({
     method: "get",

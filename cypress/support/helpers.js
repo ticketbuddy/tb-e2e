@@ -1,6 +1,7 @@
 import {startCheckout, getStarted, signOut, createPromoter, createActivity, createActivityDate, createTicket, updateTicket, reserveSeat, getReservedSeats} from "tb-sdk"
 
 export const productIdToItemId = (productId, item_number) => "item_" + productId.replace("product_", "") + `.${item_number}`
+export const accountIdToCreditorId = (accountId) => accountId.replace("account_", "creditor_")
 
 export const ticketSetup = (quantity = 1) => {
   const createPromoterReq = createPromoter()
