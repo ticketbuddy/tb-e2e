@@ -69,4 +69,12 @@ describe("Verifies email", () => {
         expect(req.headers).to.include.key('set-cookie')
       })
   })
+
+  it("Rejects invalid email signature", () => {
+    cy.execute(verifyEmail("invalid-signature"))
+      .then((req) => {
+        expect(req.status).to.eq(403)
+        expect(req.headers).to.not.include.key('set-cookie')
+      })
+  })
 })
