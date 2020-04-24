@@ -1,7 +1,7 @@
-import {getStarted, signOut, requestEmailVerification} from "tb-sdk"
+import {getStarted, signOut, requestEmailVerification, verifyEmail} from "tb-sdk"
 import {makeId} from "../support/helpers"
 
-describe("Email verification", () => {
+describe("Request email verification", () => {
   beforeEach(() => {
     cy.execute(signOut())
   })
@@ -48,5 +48,25 @@ describe("Email verification", () => {
       })
 
     // TODO check _private/sent_emails to see the email that was sent
+  })
+})
+
+describe("Verifies email", () => {
+  beforeEach(() => {
+    cy.execute(signOut())
+    cy.execute(getStarted())
+  })
+
+  it("Accepts valid email signature", () => {
+    const email = "tester@ticketbuddy.co.uk"
+
+    cy.secureSign(email)
+      .then(signature => {
+        return cy.execute(verifyEmail(signature))
+      })
+      .then((req) => {
+        expect(req.status).to.eq(200)
+        expect(req.headers).to.include.key('set-cookie')
+      })
   })
 })

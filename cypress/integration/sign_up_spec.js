@@ -68,4 +68,17 @@ describe("Sign up", () => {
         expect(req.headers).to.not.include.key("set-cookie")
       })
   })
+
+  it("rejects email when already in-use", () => {
+    const email = "tester@ticketbuddy.co.uk"
+
+    cy.execute(signUp(email, "alongpassword"))
+      .then((req) => {
+        expect(req.status).to.eq(400)
+        expect(req.body).to.deep.eq({
+          email: ["has already been taken"]
+        })
+        expect(req.headers).to.not.include.key("set-cookie")
+      })
+  })
 })

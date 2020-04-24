@@ -43,6 +43,15 @@ Cypress.Commands.add("reversePayouts", (reversePayouts) => {
   })
 })
 
+Cypress.Commands.add("secureSign", (thingToSign) => {
+  return cy.request({
+    method: "post",
+    body: {sign: thingToSign},
+    url: `/_private/data-sign`,
+    failOnStatusCode: false
+  }).then((req) => req.body.signature)
+})
+
 Cypress.Commands.add("completeCheckout", (checkoutId) => {
   return cy.request({
     method: "get",
