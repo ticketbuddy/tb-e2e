@@ -89,6 +89,10 @@ Cypress.Commands.add("assertValid", (joiSchema, body) => {
   expect(error).to.eq(undefined)
 })
 
+Cypress.Commands.add("getByTestId", testId => {
+  return cy.get(`[data-testid=${testId}]`);
+});
+
 // -- This is a child command --
 // Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
 //

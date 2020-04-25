@@ -1,5 +1,5 @@
 import {getStarted, signOut, requestEmailVerification, verifyEmail} from "tb-sdk"
-import {makeId} from "../support/helpers"
+import {makeId, getEmailIFrame} from "../support/helpers"
 
 describe("Request email verification", () => {
   beforeEach(() => {
@@ -47,7 +47,8 @@ describe("Request email verification", () => {
         expect(req.body).to.deep.eq({})
       })
 
-    // TODO check _private/sent_emails to see the email that was sent
+    cy.visit("/_private/sent_emails")
+    getEmailIFrame().contains("Please click here to verify your email address")
   })
 })
 

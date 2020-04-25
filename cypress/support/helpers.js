@@ -34,3 +34,7 @@ export const makeId = (length) => {
    }
    return result;
 }
+
+export const getEmailIFrame = () => {
+  return cy.get('iframe').its('0.contentDocument').should('exist').its('body')
+}
