@@ -1,5 +1,5 @@
-import {getStarted, signIn, magicLinkSignIn, signOut} from "tb-sdk"
-import {makeId} from "../support/helpers"
+import {getStarted, signIn, requestMagicSignIn, magicLinkSignIn, signOut} from "tb-sdk"
+import {makeId, getEmailIFrame} from "../support/helpers"
 
 describe("Sign in", () => {
   beforeEach(() => {
@@ -86,5 +86,29 @@ describe("Sign in", () => {
         expect(req.body).to.deep.eq({})
         expect(req.headers).to.not.include.key("set-cookie")
       })
+  })
+
+  describe("Requests magic sign in link", () => {
+    it("sends email when email is associated to a user", () => {
+      const email = "tester@example.com"
+      cy.execute(requestMagicSignIn(email))
+        .then((req) => {
+          expect(req.status).to.eq(200)
+          expect(req.body).to.deep.eq({})
+
+          getEmailIFrame().should("contain", `as ${email}`)
+        })
+    })
+
+    it("does not send email when email is NOT associated to a user", () => {
+      const email = "not-used@ticketbuddy.co.uk"
+      cy.execute(requestMagicSignIn(email))
+        .then((req) => {
+          expect(req.status).to.eq(200)
+          expect(req.body).to.deep.eq({})
+
+          getEmailIFrame().should("not.contain", `as ${email}`)
+        })
+    })
   })
 })

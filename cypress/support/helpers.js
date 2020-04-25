@@ -36,5 +36,6 @@ export const makeId = (length) => {
 }
 
 export const getEmailIFrame = () => {
+  cy.visit("/_private/sent_emails")
   return cy.get('iframe').its('0.contentDocument').should('exist').its('body')
 }

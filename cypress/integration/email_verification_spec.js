@@ -47,7 +47,6 @@ describe("Request email verification", () => {
         expect(req.body).to.deep.eq({})
       })
 
-    cy.visit("/_private/sent_emails")
     getEmailIFrame().contains("Please click here to verify your email address")
   })
 })
