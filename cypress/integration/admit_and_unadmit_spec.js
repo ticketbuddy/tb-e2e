@@ -113,4 +113,6 @@ describe("Admit and un-admit seats", () => {
           })
       })
   })
+
+  it("fetches admission history for a seat")
 })
