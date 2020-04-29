@@ -12,8 +12,9 @@ export const ticketSetup = (quantity = 1) => {
     ticketId: createTicketReq.body.wish.product_id,
     title: "Early bird ticket",
     quantity: quantity,
-    creditorId: "creditor-one-two-three",
-    amount: 400
+    shareholders: {
+       "creditor-one-two-three": 400
+    }
   })
 
   cy.execute(createPromoterReq)

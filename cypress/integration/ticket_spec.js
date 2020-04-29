@@ -44,8 +44,9 @@ describe("Ticket", () => {
       ticketId: createTicketReq.body.wish.product_id,
       title: "Early bird ticket",
       quantity: 200,
-      creditorId: "creditor-one-two-three",
-      amount: 400
+      shareholders: {
+        "creditor-one-two-three": 400
+      }
     })
 
     cy.execute(updateTicketReq)
@@ -94,8 +95,9 @@ describe("Ticket", () => {
       ticketId: "this-is-not-my-ticket",
       title: "Early bird ticket",
       quantity: 200,
-      creditorId: "creditor-one-two-three",
-      amount: 400
+      shareholders: {
+        "creditor-one-two-three": 400
+      }
     })
 
     cy.execute(updateTicketReq)
