@@ -1,5 +1,5 @@
 import {createPromoter, getStarted, getAccountPromoters, signOut, updatePromoter} from "tb-sdk"
-import {createPromoterSchema, accountPromotersSchema} from "../schemas"
+import {createPromoterSchema, accountPromotersSchema} from "../../schemas"
 import Joi from "@hapi/joi"
 
 describe("Promoter", () => {

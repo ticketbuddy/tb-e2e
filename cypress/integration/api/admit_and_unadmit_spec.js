@@ -1,5 +1,5 @@
 import {getStarted, getCurrentPerson, admitSeat, unAdmitSeat, reserveSeat, signOut} from "tb-sdk"
-import {ticketSetup} from "../support/helpers"
+import {ticketSetup} from "../../support/helpers"
 
 describe("Admit and un-admit seats", () => {
   beforeEach(() => {

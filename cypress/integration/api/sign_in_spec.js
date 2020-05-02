@@ -1,5 +1,5 @@
 import {getStarted, signIn, requestMagicSignIn, magicLinkSignIn, signOut} from "tb-sdk"
-import {makeId, getEmailIFrame} from "../support/helpers"
+import {makeId, getEmailIFrame} from "../../support/helpers"
 
 describe("Sign in", () => {
   beforeEach(() => {

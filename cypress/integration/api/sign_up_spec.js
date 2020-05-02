@@ -1,5 +1,5 @@
 import {getStarted, createPromoter, getAccountPromoters, getCurrentPerson, signOut, signUp} from "tb-sdk"
-import {makeId} from "../support/helpers"
+import {makeId} from "../../support/helpers"
 
 describe("Sign up", () => {
   beforeEach(() => {

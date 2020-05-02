@@ -1,5 +1,5 @@
 import {getStarted, signOut} from "tb-sdk"
-import {makeId} from "../support/helpers"
+import {makeId} from "../../support/helpers"
 
 describe("Get started", () => {
   beforeEach(() => {

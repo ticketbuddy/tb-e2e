@@ -1,5 +1,5 @@
 import {startCheckout, getStarted, signOut, createActivityDate, reserveSeat, getReservedSeats, getCompletedSeats} from "tb-sdk"
-import {productIdToItemId, ticketSetup} from "../support/helpers"
+import {productIdToItemId, ticketSetup} from "../../support/helpers"
 
 beforeEach(() => {
   cy.execute(signOut())

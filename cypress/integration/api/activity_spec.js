@@ -1,5 +1,5 @@
 import {createPromoter, createActivity, updateActivity, getStarted, signOut, getAccountActivities, getAccountActivitiesByPromoter} from "tb-sdk"
-import {createActivitySchema, getAccountActivitiesSchema} from "../schemas"
+import {createActivitySchema, getAccountActivitiesSchema} from "../../schemas"
 import Joi from "@hapi/joi"
 
 describe("Activity", () => {

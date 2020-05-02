@@ -1,5 +1,5 @@
 import {getStarted, signOut, getCurrentPerson, updatePerson, signIn} from "tb-sdk"
-import {makeId} from "../support/helpers"
+import {makeId} from "../../support/helpers"
 
 describe("Update person", () => {
   beforeEach(() => {

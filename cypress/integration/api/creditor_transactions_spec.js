@@ -1,5 +1,5 @@
 import {signOut, getStarted, getCurrentPerson, getCurrentCreditorTransactions} from "tb-sdk"
-import {accountIdToCreditorId} from "../support/helpers"
+import {accountIdToCreditorId} from "../../support/helpers"
 
 describe("Creditor's transactions", () => {
   beforeEach(() => {

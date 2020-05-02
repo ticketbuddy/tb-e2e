@@ -1,5 +1,5 @@
 import {getStarted, signOut, createPromoter, createActivity, createActivityDate, createTicket, updateTicket, reserveSeat, getReservedSeats} from "tb-sdk"
-import {productIdToItemId, ticketSetup} from "../support/helpers"
+import {productIdToItemId, ticketSetup} from "../../support/helpers"
 
 describe("Seat", () => {
   beforeEach(() => {

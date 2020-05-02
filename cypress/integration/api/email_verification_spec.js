@@ -1,5 +1,5 @@
 import {getStarted, signOut, requestEmailVerification, verifyEmail} from "tb-sdk"
-import {makeId, getEmailIFrame} from "../support/helpers"
+import {makeId, getEmailIFrame} from "../../support/helpers"
 
 describe("Request email verification", () => {
   beforeEach(() => {
