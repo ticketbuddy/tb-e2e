@@ -44,6 +44,14 @@ export const activityDateSetup = () => {
   return {createPromoterReq, createActivityReq, createActivityDateReq}
 }
 
+export const activityDateTicketSetup = () => {
+  const {createPromoterReq, createActivityReq, createActivityDateReq} = activityDateSetup()
+  const createTicketReq = createTicket(createActivityDateReq.body.wish.activity_date_id)
+  cy.execute(createTicketReq)
+
+  return {createPromoterReq, createActivityReq, createActivityDateReq, createTicketReq}
+}
+
 export const makeId = (length) => {
    var result           = '';
    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
