@@ -26,6 +26,16 @@ export const ticketSetup = (quantity = 1) => {
   return {createTicketReq, createActivityDateReq}
 }
 
+export const activitySetup = () => {
+  const createPromoterReq = createPromoter()
+  const createActivityReq = createActivity(createPromoterReq.body.wish.promoter_id)
+
+  cy.execute(createPromoterReq)
+  cy.execute(createActivityReq)
+
+  return {createPromoterReq, createActivityReq}
+}
+
 export const makeId = (length) => {
    var result           = '';
    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
