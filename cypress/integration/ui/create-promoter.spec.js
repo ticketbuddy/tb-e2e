@@ -12,5 +12,7 @@ describe("Promoter", () => {
     cy.getByTestId("promoter-card").contains("Untitled promoter")
     cy.getByTestId("create-promoter-btn").click()
     cy.getByTestId("promoter-card").should('have.length', 2)
+    cy.reload()
+    cy.getByTestId("promoter-card").should('have.length', 2)
   })
 })
