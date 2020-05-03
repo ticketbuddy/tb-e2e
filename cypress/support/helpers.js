@@ -4,10 +4,8 @@ export const productIdToItemId = (productId, item_number) => "item_" + productId
 export const accountIdToCreditorId = (accountId) => accountId.replace("account_", "creditor_")
 
 export const ticketSetup = (quantity = 1) => {
-  const createPromoterReq = createPromoter()
-  const createActivityReq = createActivity(createPromoterReq.body.wish.promoter_id)
-  const createActivityDateReq = createActivityDate(createActivityReq.body.wish.activity_id)
-  const createTicketReq = createTicket(createActivityDateReq.body.wish.activity_date_id)
+  const {createPromoterReq, createActivityReq, createActivityDateReq, createTicketReq} = activityDateTicketSetup()
+
   const updateTicketReq = updateTicket({
     ticketId: createTicketReq.body.wish.product_id,
     title: "Early bird ticket",
@@ -17,10 +15,6 @@ export const ticketSetup = (quantity = 1) => {
     }
   })
 
-  cy.execute(createPromoterReq)
-  cy.execute(createActivityReq)
-  cy.execute(createActivityDateReq)
-  cy.execute(createTicketReq)
   cy.execute(updateTicketReq)
 
   return {createTicketReq, createActivityDateReq}
