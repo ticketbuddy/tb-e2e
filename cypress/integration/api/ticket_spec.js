@@ -24,7 +24,8 @@ describe("Ticket", () => {
           owning_shelf: createActivityDateReq.body.wish.activity_date_id,
           title: "Untitled",
           shareholders: {},
-          quantity: 0
+          qty_available: 0,
+          qty_reserved: 0
         })
       })
   })
@@ -56,7 +57,8 @@ describe("Ticket", () => {
           product_id: createTicketReq.body.wish.product_id,
           owning_shelf: createActivityDateReq.body.wish.activity_date_id,
           title: "Early bird ticket",
-          quantity: 200,
+          qty_available: 200,
+          qty_reserved: 0,
           shareholders: {
             "creditor-one-two-three": 400
           }
