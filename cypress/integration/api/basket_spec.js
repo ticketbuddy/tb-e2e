@@ -61,4 +61,27 @@ describe("Basket", () => {
         })
       })
   })
+
+  it("shows items when ask for 2 seats when only 1 is available", () => {
+    cy.execute(getStarted())
+    const {createTicketReq} = ticketSetup()
+    const checkoutAmount = 400
+
+    cy.execute(signOut())
+    cy.execute(getStarted())
+    cy.upgradeToVerified()
+
+    const createBasketReq = createBasket({
+      [createTicketReq.body.wish.product_id]: 2
+    })
+
+    cy.execute(createBasketReq)
+
+    const getBasketReq = getBasket(createBasketReq.body.wish.basket_id)
+    cy.execute(getBasketReq)
+      .then((res) => {
+        expect(res.status).to.eq(200)
+        expect(Object.keys(res.body)).to.have.length(1)
+      })
+  })
 })
