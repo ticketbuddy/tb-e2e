@@ -50,14 +50,21 @@ describe("Basket", () => {
     cy.execute(getBasketReq)
       .then((res) => {
         expect(res.status).to.eq(200)
-        const itemReserved = Object.values(res.body)[0]
-        expect(itemReserved).to.deep.include({
-          amount: 400,
-          basket_id: createBasketReq.body.wish.basket_id,
-          product_id: createTicketReq.body.wish.product_id,
-          shareholders: {"creditor-one-two-three": 400},
-          status: "reserved",
-          title: "Early bird ticket",
+        expect(res.body).to.include.keys('basket_id', 'checkout_id', 'items', 'rejected_items', 'person_id')
+        expect(res.body.items.length).to.eq(1)
+        expect(res.body.rejected_items.length).to.eq(0)
+        expect(res.body.items[0]).to.deep.include({
+          "product": {
+            "amount": 400,
+            "title": "Early bird ticket"
+          },
+          "product_id": createTicketReq.body.wish.product_id,
+          "shareholders": [
+            {
+              "amount": 400,
+              "creditor_id": "creditor-one-two-three"
+            }
+          ]
         })
       })
   })
@@ -81,7 +88,14 @@ describe("Basket", () => {
     cy.execute(getBasketReq)
       .then((res) => {
         expect(res.status).to.eq(200)
-        expect(Object.keys(res.body)).to.have.length(1)
+        expect(res.body).to.include.keys('basket_id', 'checkout_id', 'items', 'rejected_items', 'person_id')
+        expect(res.body.items.length).to.eq(1)
+        expect(res.body.rejected_items.length).to.eq(1)
+
+        expect(res.body.rejected_items[0]).to.deep.eq({
+          product: {amount: 400, title: "Early bird ticket"},
+          product_id: createTicketReq.body.wish.product_id
+        })
       })
   })
 })
